@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
-import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
-import FlavorsSection from "../components/FlavorsSection";
-import AboutSection from "../components/AboutSection";
-import LocationsSection from "../components/LocationsSection";
-import FooterSection from "../components/FooterSection";
+import FeaturedFlavors from "../components/FeaturedFlavors";
+import AboutPreview from "../components/AboutPreview";
+import MenuPreview from "../components/MenuPreview";
 
 const Scene3D = lazy(() => import("../components/Scene3D"));
 
@@ -24,24 +22,15 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="relative min-h-screen" style={{ background: "var(--gradient-hero)" }}>
-      {/* 3D Background */}
+    <div className="relative" style={{ background: "var(--gradient-hero)" }}>
       <Suspense fallback={null}>
-        <div className="fixed inset-0 z-0">
-          <Scene3D />
-        </div>
+        <Scene3D />
       </Suspense>
-
-      {/* UI Layer */}
       <div className="relative z-10">
-        <Navbar />
         <HeroSection />
-        <div className="relative" style={{ background: "linear-gradient(to bottom, transparent, var(--background) 15%)" }}>
-          <FlavorsSection />
-          <AboutSection />
-          <LocationsSection />
-          <FooterSection />
-        </div>
+        <FeaturedFlavors />
+        <AboutPreview />
+        <MenuPreview />
       </div>
     </div>
   );
