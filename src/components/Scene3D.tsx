@@ -116,6 +116,7 @@ function Particles({ count = 200 }: { count?: number }) {
           count={count}
           array={points}
           itemSize={3}
+          args={[points, 3]}
         />
       </bufferGeometry>
       <pointsMaterial size={0.03} color="#c084fc" transparent opacity={0.6} sizeAttenuation />
