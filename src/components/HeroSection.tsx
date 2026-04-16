@@ -1,41 +1,52 @@
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
+import heroImg from "@/assets/hero-bg.jpg";
 
-const words = ["Cool", "Uncle", "—", "Where", "Every", "Scoop", "Tells", "a", "Story"];
+const words = ["Every", "Scoop", "Tells", "a", "Sweet", "Story"];
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
-      {/* Background gradient overlay */}
-      <div
-        className="absolute inset-0 z-[1] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at 50% 80%, oklch(0.15 0.08 300 / 40%) 0%, transparent 60%)" }}
-      />
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
+      {/* Dreamy background image */}
+      <div className="absolute inset-0 z-[1]">
+        <img
+          src={heroImg}
+          alt=""
+          className="w-full h-full object-cover opacity-30"
+          width={1920}
+          height={1080}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to bottom, oklch(0.98 0.005 20 / 60%), oklch(0.98 0.005 20 / 95%))" }}
+        />
+      </div>
 
-      <div className="relative z-10 text-center max-w-5xl mx-auto">
+      <div className="relative z-10 text-center max-w-4xl mx-auto pt-20">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-6"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+          className="mb-4"
         >
-          <span className="text-xs uppercase tracking-[0.4em] text-muted-foreground font-body">
-            Est. 2009 · Indore & Dewas
+          <span className="scoop-badge text-sm">
+            🍦 Est. 2009 · Indore & Dewas
           </span>
         </motion.div>
 
-        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold leading-[0.9] tracking-tight">
+        <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight">
           {words.map((word, i) => (
             <motion.span
               key={i}
-              initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 30, rotateX: -40 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
               transition={{
-                delay: 0.8 + i * 0.12,
-                duration: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94],
+                delay: 0.6 + i * 0.1,
+                duration: 0.5,
+                ease: [0.34, 1.56, 0.64, 1],
               }}
-              className={`inline-block mr-[0.25em] ${
-                word === "Cool" || word === "Uncle" ? "text-gradient" : "text-foreground"
+              className={`inline-block mr-[0.2em] ${
+                word === "Sweet" || word === "Story" ? "candy-text" : "text-foreground"
               }`}
             >
               {word}
@@ -46,25 +57,50 @@ export default function HeroSection() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2, duration: 0.8 }}
-          className="mt-8 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed font-body"
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="mt-6 text-base sm:text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed"
         >
-          Premium ice creams, sundaes & café delights crafted in the heart of Central India.
-          Over 300+ dealers strong, serving joy since 2009.
+          Premium handcrafted ice creams, dreamy sundaes & café delights — 
+          lovingly made in the heart of Central India since 2009 🍨
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.5 }}
-          className="mt-12 flex flex-col items-center gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8, duration: 0.5 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
-          <a
-            href="#flavors"
-            className="neon-border rounded-full px-8 py-3 text-sm font-medium text-foreground hover:shadow-[0_0_30px_oklch(0.75_0.25_340_/_30%)] transition-shadow duration-500"
-          >
-            Explore Flavors
-          </a>
+          <Link to="/flavors" className="candy-btn text-sm">
+            🍦 Explore Flavors
+          </Link>
+          <Link to="/about" className="candy-btn-outline text-sm">
+            Our Story →
+          </Link>
+        </motion.div>
+
+        {/* Fun stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.2, duration: 0.6 }}
+          className="mt-16 grid grid-cols-3 gap-6 max-w-md mx-auto"
+        >
+          {[
+            { value: "300+", label: "Dealers" },
+            { value: "30+", label: "Flavors" },
+            { value: "15+", label: "Years" },
+          ].map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 2.4 + i * 0.1, ease: [0.34, 1.56, 0.64, 1] }}
+              className="text-center"
+            >
+              <div className="font-display text-2xl sm:text-3xl font-bold candy-text">{stat.value}</div>
+              <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
 
@@ -73,15 +109,15 @@ export default function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3 }}
-        className="absolute bottom-10 z-10 flex flex-col items-center gap-2"
+        className="absolute bottom-8 z-10 flex flex-col items-center gap-2"
       >
-        <span className="text-xs tracking-widest uppercase text-muted-foreground">Scroll to Enter</span>
+        <span className="text-xs font-medium text-muted-foreground">Scroll down</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
-          className="w-5 h-8 rounded-full border border-muted-foreground/30 flex items-start justify-center p-1"
+          className="text-primary text-xl"
         >
-          <div className="w-1 h-2 rounded-full bg-primary" />
+          ↓
         </motion.div>
       </motion.div>
     </section>
