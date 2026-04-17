@@ -121,8 +121,14 @@
   * {
     border-color: var(--color-border);
   }
+  html, body {
+    min-height: 100%;
+    background: var(--gradient-hero);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
   body {
-    background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-family-body);
     overflow-x: hidden;
