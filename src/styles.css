@@ -128,6 +128,9 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
+  @media (pointer: fine) {
+    body, a, button { cursor: none !important; }
+  }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-family-display);
   }
