@@ -1,31 +1,63 @@
-import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useMemo } from "react";
+import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 
 const EMOJIS = ["🍦", "🍨", "🍧", "🍡", "🧁", "🍪", "🍩", "🍓", "🍒", "🥥"];
 
+type Item = {
+  left: number;
+  top: number;
+  emoji: string;
+  size: number;
+  speed: number;
+  spin: number;
+};
+
+function FloatingTreat({ item, progress }: { item: Item; progress: MotionValue<number> }) {
+  const y = useTransform(progress, [0, 1], [0, -item.speed * 4]);
+  const r = useTransform(progress, [0, 1], [0, item.spin]);
+  return (
+    <motion.div
+      style={{
+        left: `${item.left}%`,
+        top: `${item.top}%`,
+        fontSize: item.size,
+        y,
+        rotate: r,
+        opacity: 0.55,
+        filter: "drop-shadow(0 4px 6px rgba(236,72,153,0.15))",
+      }}
+      className="absolute"
+    >
+      {item.emoji}
+    </motion.div>
+  );
+}
+
 /**
  * Scroll-driven decorative ice-cream layer:
+ * - Top progress scoop
  * - Parallax floating emojis
- * - Animated progress scoop bar (top of screen)
- * - "Melting drip" gradient that grows with scroll
+ * - Melting drip that grows with scroll
  */
 export default function ScrollFX() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
   const dripHeight = useTransform(progress, [0, 1], ["0vh", "60vh"]);
   const rotate = useTransform(progress, [0, 1], [0, 360]);
-  const [items, setItems] = useState<{ left: number; top: number; emoji: string; size: number; speed: number }[]>([]);
+  const xTravel = useTransform(progress, [0, 1], ["0vw", "calc(100vw - 32px)"]);
 
-  useEffect(() => {
-    const arr = Array.from({ length: 14 }, (_, i) => ({
-      left: (i * 53) % 100,
-      top: (i * 37) % 100,
-      emoji: EMOJIS[i % EMOJIS.length],
-      size: 22 + ((i * 7) % 28),
-      speed: 80 + ((i * 41) % 220),
-    }));
-    setItems(arr);
-  }, []);
+  const items = useMemo<Item[]>(
+    () =>
+      Array.from({ length: 14 }, (_, i) => ({
+        left: (i * 53) % 100,
+        top: (i * 37) % 100,
+        emoji: EMOJIS[i % EMOJIS.length],
+        size: 22 + ((i * 7) % 28),
+        speed: 80 + ((i * 41) % 220),
+        spin: i % 2 === 0 ? 180 : -180,
+      })),
+    [],
+  );
 
   return (
     <>
@@ -35,7 +67,7 @@ export default function ScrollFX() {
         className="fixed top-0 left-0 right-0 h-1 origin-left z-[70] bg-gradient-to-r from-pink-400 via-amber-300 to-emerald-300"
       />
       <motion.div
-        style={{ x: useTransform(progress, [0, 1], ["0vw", "calc(100vw - 32px)"]), rotate }}
+        style={{ x: xTravel, rotate }}
         className="fixed top-[-10px] left-0 z-[71] text-2xl pointer-events-none"
       >
         🍦
@@ -43,27 +75,9 @@ export default function ScrollFX() {
 
       {/* Parallax floating treats */}
       <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden">
-        {items.map((it, i) => {
-          const y = useTransform(progress, [0, 1], [0, -it.speed * 4]);
-          const r = useTransform(progress, [0, 1], [0, i % 2 === 0 ? 180 : -180]);
-          return (
-            <motion.div
-              key={i}
-              style={{
-                left: `${it.left}%`,
-                top: `${it.top}%`,
-                fontSize: it.size,
-                y,
-                rotate: r,
-                opacity: 0.55,
-                filter: "drop-shadow(0 4px 6px rgba(236,72,153,0.15))",
-              }}
-              className="absolute"
-            >
-              {it.emoji}
-            </motion.div>
-          );
-        })}
+        {items.map((it, i) => (
+          <FloatingTreat key={i} item={it} progress={progress} />
+        ))}
       </div>
 
       {/* Melting drip from top */}
