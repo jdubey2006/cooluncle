@@ -1,6 +1,10 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import IceCreamCursor from "../components/IceCreamCursor";
+import CoolUncleMascot from "../components/CoolUncleMascot";
+import PageTransition from "../components/PageTransition";
+import ScrollFX from "../components/ScrollFX";
 
 import appCss from "../styles.css?url";
 
@@ -62,11 +66,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <>
+      <IceCreamCursor />
+      <ScrollFX />
       <Navbar />
       <main>
-        <Outlet />
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
       </main>
       <Footer />
+      <CoolUncleMascot />
     </>
   );
 }
